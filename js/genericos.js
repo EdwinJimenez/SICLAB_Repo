@@ -5,7 +5,7 @@
 	$('.collapsible').collapsible({
       accordion : false}); // A setting that changes the collapsible behavior to expandable instead of the default accordion style
 	//COMIENZAN REPORTES
-var reporte1 = function()	
+var alumnosActuales = function()	
 {
 	var parametros = "opc=alumnosActuales1"+
 		"&id="+Math.random();
@@ -18,8 +18,31 @@ var reporte1 = function()
 			success: function(response){
 				if(response.respuesta == true)
 				{
-					//$("#alumnosActuales").html(" ");
+					$("#alumnosActuales").html(" ");
 					$("#alumnosActuales").append(response.renglones);
+				}
+			},
+			error: function(xhr, ajaxOptions,x){
+				
+				console.log(xhr);
+			}
+		});
+	}
+	var articuloMasPrestado = function()	
+{
+	var parametros = "opc=articuloMasPrestado1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#masSolicitado").html(" ");
+					$("#masSolicitado").append(response.renglones);
 				}
 			},
 			error: function(xhr, ajaxOptions,x){
@@ -1284,7 +1307,7 @@ var reporte1 = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");
 		$("#resumenReportes").show("slow");
-		reporte1();
+		alumnosActuales();
 	}
 	var existenciaInventario=function()
 	{
@@ -1359,7 +1382,8 @@ var reporte1 = function()
 	//Reportes
 	$("#tabReportesGenericos").on("click",resumenReportes);
 	$("#btnResumenReportes").on("click",resumenReportes);
-	$("#btnResumenReportes").on("click",reporte1);
+	$("#tabReportesGenericos").on("click",alumnosActuales);
+	$("#tabReportesGenericos").on("click",articuloMasPrestado);
 	$("#btnExistenciaInventario").on("click",existenciaInventario);
 	$("#btnBajoInventario").on("click",bajoInventario);
 	$("#btnPedidoMaterial").on("click",pedidoMaterial);

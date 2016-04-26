@@ -1406,7 +1406,44 @@ function alumnosActuales()
 		{ 
 			$rows = mysql_fetch_array($res); 
 			$renglones .= "<p>Uso actual</p>";
-			$renglones .= "<p>".$rows["Contador"]." Alumnos</p>";
+			$renglones .= "<p style= font-size:16px;>".$rows["Contador"]." Alumnos</p>";
+			$respuesta=true; 
+		} 
+	}
+	else
+	{
+		salir();
+	}
+	$arrayJSON = array('respuesta' => $respuesta,
+		'renglones' => $renglones);
+	print json_encode($arrayJSON);
+}
+//CONSULTA EL ARTICULO MAS PRESTADO Y SU CANTIDAD
+function articuloMasPrestado()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$usuario	= $_SESSION['nombre'];
+		$labUsuario="";
+		$claveLab 		= obtieneCveLab($usuario); //GUARDO LA CLAVE DEL LAB
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta=sprintf("select count(lbprestamosarticulos.identificadorArticulo) as Cantidad,lbarticulos.descripcionArticulo as Articulo from lbprestamosarticulos inner join lbasignaarticulos on
+lbprestamosarticulos.identificadorArticulo=lbasignaarticulos.indentificadorArticulo
+inner join lbarticulos on
+lbarticulos.identificadorArticulo=lbprestamosarticulos.identificadorArticulo
+where lbasignaarticulos.claveLaboratorio='%s'
+group by lbasignaarticulos.indentificadorArticulo
+order by Cantidad DESC LIMIT 1",$claveLab);
+		$res = mysql_query($consulta);
+		if (mysql_num_rows($res)) //Si se encontraron datos en la búsqueda 
+		{ 
+			$rows = mysql_fetch_array($res); 
+			$renglones .= "<p>Materiales</p>";
+			$renglones .= "<p style= font-size:16px;> Mas solicitado ".$rows["Articulo"]." ".$rows["Cantidad"]."</p>";
 			$respuesta=true; 
 		} 
 	}
@@ -1521,6 +1558,9 @@ switch ($opc){
 	//AGREGUE
 	case 'alumnosActuales1':
 	alumnosActuales();
+	break;
+	case 'articuloMasPrestado1':
+	articuloMasPrestado();
 	break;
 } 
 ?>

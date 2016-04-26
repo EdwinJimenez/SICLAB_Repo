@@ -13,8 +13,8 @@
 	        <div class="col s4 m4">
 	          <div class="card red lighten-2">
 	            <div class="card-content white-text">
-	              <span class="card-title">Materiales</span>
-	              <p>Mas solicitado: Cautin (100 veces)</p>
+	              <span class="card-title" id="masSolicitado">Materiales</span>
+	              <p></p>
 	              <p>Mas negado: Multimetro (10 veces)</p>
 	              <p>Sin existencia: 5 articulos </p>
 	            </div>
@@ -24,9 +24,7 @@
 	          <div class="card orange lighten-1">
 	            <div class="card-content white-text">
 	              <span class="card-title" id="alumnosActuales"></span>
-	              <!--<p ><br></p>
-	              <!--<p>30 Alumnos</p>
-	              <p><br></p>-->
+	              
 	            </div>
 	          </div>
 	        </div>
