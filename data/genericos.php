@@ -1455,6 +1455,59 @@ order by Cantidad DESC LIMIT 1",$claveLab);
 		'renglones' => $renglones);
 	print json_encode($arrayJSON);
 }
+
+function resumenInventarioActual()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$prestamo	= "";
+		$con 		= 0;
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("select claveArticulo as 'Clave Articulo' ,descripcionArticulo as 'Descripcion',fechaCaducidad as 'Caducidad', count(claveArticulo) as 'Existencia' from lbarticulos inner join lbasignaarticulos on lbarticulos.identificadorArticulo=lbasignaarticulos.indentificadorArticulo
+where lbasignaarticulos.claveLaboratorio='%s' group by claveArticulo",$claveLab);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='codigoArticulo'>Codigo</th>";
+		$renglones	.= "<th data-field='descripcion'>Descripcion</th>";
+		$renglones	.= "<th data-field='existencia'>Existencia</th>";
+		$renglones	.= "<th data-field='caducidad'>Caducidad</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["Clave Articulo"]."</td>";
+			$renglones .= "<td>".$rows[$c]["Descripcion"]."</td>";
+			$renglones .= "<td>".$rows[$c]["Existencia"]."</td>";
+			$renglones .= "<td>".$rows[$c]["Caducidad"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
 //Menú principal
 $opc = $_POST["opc"];
 switch ($opc){
@@ -1561,6 +1614,9 @@ switch ($opc){
 	break;
 	case 'articuloMasPrestado1':
 	articuloMasPrestado();
+	break;
+	case 'resumenInventarioActual1':
+	resumenInventarioActual();
 	break;
 } 
 ?>

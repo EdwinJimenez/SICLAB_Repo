@@ -29,7 +29,7 @@ var alumnosActuales = function()
 		});
 	}
 	var articuloMasPrestado = function()	
-{
+	{
 	var parametros = "opc=articuloMasPrestado1"+
 		"&id="+Math.random();
 		$.ajax({
@@ -47,6 +47,34 @@ var alumnosActuales = function()
 			},
 			error: function(xhr, ajaxOptions,x){
 				
+				console.log(xhr);
+			}
+		});
+	}
+	var resumenInventarioActual = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=resumenInventarioActual1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbInventarioActual").html(" ");
+					$("#tbInventarioActual").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin inventario", "", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión sol aceptadas");
 				console.log(xhr);
 			}
 		});
@@ -1315,6 +1343,7 @@ var alumnosActuales = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");	
 		$("#existenciaInventario").show("slow");
+		resumenInventarioActual();
 	}
 	var bajoInventario = function()
 	{
