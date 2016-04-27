@@ -14,9 +14,7 @@
 	          <div class="card red lighten-2">
 	            <div class="card-content white-text">
 	              <span class="card-title" id="masSolicitado">Materiales</span>
-	              <p></p>
-	              <p>Mas negado: Multimetro (10 veces)</p>
-	              <p>Sin existencia: 5 articulos </p>
+	              
 	            </div>
 	          </div>
 	        </div>

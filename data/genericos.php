@@ -1405,8 +1405,9 @@ function alumnosActuales()
 		if (mysql_num_rows($res)) //Si se encontraron datos en la búsqueda 
 		{ 
 			$rows = mysql_fetch_array($res); 
-			$renglones .= "<p>Uso actual</p>";
+			$renglones .= "<p>Uso del día</p>";
 			$renglones .= "<p style= font-size:16px;>".$rows["Contador"]." Alumnos</p>";
+			$renglones .= "<p style= font-size:16px;><br></p>";
 			$respuesta=true; 
 		} 
 	}
@@ -1438,6 +1439,10 @@ lbarticulos.identificadorArticulo=lbprestamosarticulos.identificadorArticulo
 where lbasignaarticulos.claveLaboratorio='%s'
 group by lbasignaarticulos.indentificadorArticulo
 order by Cantidad DESC LIMIT 1",$claveLab);
+		$consulta2=sprintf("select count(lbarticulos.claveArticulo) as Contador from lbarticulos inner join
+lbasignaarticulos on
+lbarticulos.identificadorArticulo=lbasignaarticulos.indentificadorArticulo inner join lbinventarios on lbarticulos.claveArticulo=lbinventarios.claveArticulo
+where lbasignaarticulos.claveLaboratorio='%s' and lbinventarios.cantidad=0 group by lbarticulos.claveArticulo limit 10",$claveLab);
 		$res = mysql_query($consulta);
 		if (mysql_num_rows($res)) //Si se encontraron datos en la búsqueda 
 		{ 
@@ -1446,6 +1451,13 @@ order by Cantidad DESC LIMIT 1",$claveLab);
 			$renglones .= "<p style= font-size:16px;> Mas solicitado: ".$rows["Articulo"]." (".$rows["Cantidad"].")</p>";
 			$respuesta=true; 
 		} 
+		$res2=mysql_query($consulta2);
+		if (mysql_num_rows($res2)) //Si se encontraron datos en la búsqueda 
+		{ 
+			$rows = mysql_fetch_array($res2); 
+			$renglones .= "<p style= font-size:16px;> Sin existencia: ".$rows["Contador"]."</p>";
+			$respuesta=true; 
+		}
 	}
 	else
 	{
