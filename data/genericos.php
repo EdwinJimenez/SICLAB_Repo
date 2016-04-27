@@ -1455,7 +1455,54 @@ order by Cantidad DESC LIMIT 1",$claveLab);
 		'renglones' => $renglones);
 	print json_encode($arrayJSON);
 }
+function articulosSinExistencia()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$prestamo	= "";
+		$con 		= 0;
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("select lbarticulos.descripcionArticulo as 'Descripcion' from lbarticulos inner join
+lbasignaarticulos on
+lbarticulos.identificadorArticulo=lbasignaarticulos.indentificadorArticulo inner join lbinventarios on lbarticulos.claveArticulo=lbinventarios.claveArticulo
+where lbasignaarticulos.claveLaboratorio='%s' and lbinventarios.cantidad=0 group by lbarticulos.claveArticulo limit 10",$claveLab);
+		$res 		= mysql_query($consulta);
 
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='descripcionArticulo'>Articulo</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["Descripcion"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
 function resumenInventarioActual()
 {
 	$respuesta 	= false;
@@ -1772,6 +1819,9 @@ switch ($opc){
 	//AGREGUE
 	case 'alumnosActuales1':
 	alumnosActuales();
+	break;
+	case 'articulosSinExistencia1':
+	articulosSinExistencia();
 	break;
 	case 'articuloMasPrestado1':
 	articuloMasPrestado();

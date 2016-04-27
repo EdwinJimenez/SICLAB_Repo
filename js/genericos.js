@@ -180,14 +180,11 @@ var articulosEnReparacion = function()
 			success: function(response){
 				if(response.respuesta == true)
 				{
-					$("#tbInventarioActual").html(" ");
-					$("#tbInventarioActual").append(response.renglones);
+					$("#tbMaterialesSinStock").html(" ");
+					$("#tbMaterialesSinStock").append(response.renglones);
 				}
-				else
-					sweetAlert("Sin inventario", "", "error");
 			},
 			error: function(xhr, ajaxOptions,x){
-				console.log("Error de conexión sol aceptadas");
 				console.log(xhr);
 			}
 		});
@@ -1557,7 +1554,8 @@ var articulosEnReparacion = function()
 	$("#tabReportesGenericos").on("click",resumenReportes);
 	$("#btnResumenReportes").on("click",resumenReportes);
 	$("#tabReportesGenericos").on("click",alumnosActuales);
-	$("#tabReportesGenericos").on("click",articuloMasPrestado);
+	$("#tabReportesGenericos").on("click",articuloMasPrestado);+
+	$("#tabReportesGenericos").on("click",articulosSinExistencia);
 	$("#btnExistenciaInventario").on("click",existenciaInventario);
 	$("#btnBajoInventario").on("click",bajoInventario);
 	$("#btnMaterialDañado").on("click",enReparacion);

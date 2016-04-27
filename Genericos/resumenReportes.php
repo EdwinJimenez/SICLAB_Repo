@@ -52,19 +52,9 @@
 	          <div class="card grey lighten-3">
 	            <div class="card-content black-text">
 	              <span class="card-title">Materiales sin stock</span>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
-	              <p><br></p>
+	              <table id="tbMaterialesSinStock">
+  
+  				</table>
 	            </div>
 	          </div>
 	        </div>
