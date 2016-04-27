@@ -107,6 +107,34 @@ var articulosEnReparacion = function()
 			}
 		});
 	}
+	var articulosEnPrestamo= function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=enPrestamo1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbArticulosEnPrestamo").html(" ");
+					$("#tbArticulosEnPrestamo").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin articulos en préstamo", "No hay articulos en préstamo actualmente.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
+				console.log(xhr);
+			}
+		});
+	}
 	//FALTA
 	var articulosSinExistencia = function()
 	{
@@ -1392,6 +1420,7 @@ var articulosEnReparacion = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");
 		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
 		$("#resumenReportes").show("slow");
 		alumnosActuales();
 	}
@@ -1401,6 +1430,7 @@ var articulosEnReparacion = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");	
 		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
 		$("#existenciaInventario").show("slow");
 		resumenInventarioActual();
 	}
@@ -1410,6 +1440,7 @@ var articulosEnReparacion = function()
 		$("#existenciaInventario").hide("slow");
 		$("#pedidoMaterial").hide("slow");
 		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
 		$("#bajoInventario").show("slow");
 	}
 	var enReparacion = function()
@@ -1418,8 +1449,20 @@ var articulosEnReparacion = function()
 		$("#existenciaInventario").hide("slow");
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");
+		$("#enPrestamo").hide("slow");
 		$("#enReparacion").show("slow");
 		articulosEnReparacion();
+
+	}
+	var enPrestamo = function()
+	{
+		$("#resumenReportes").hide("slow");
+		$("#existenciaInventario").hide("slow");
+		$("#pedidoMaterial").hide("slow");
+		$("#bajoInventario").hide("slow");
+		$("#enReparacion").hide("slow");
+		$("#enPrestamo").show("slow");
+		articulosEnPrestamo();
 
 	}
 	var pedidoMaterial=function()
@@ -1428,6 +1471,7 @@ var articulosEnReparacion = function()
 		$("#existenciaInventario").hide("slow");
 		$("#bajoInventario").hide("slow");
 		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
 		$("#pedidoMaterial").show("slow");
 
 	}
@@ -1488,6 +1532,7 @@ var articulosEnReparacion = function()
 	$("#btnExistenciaInventario").on("click",existenciaInventario);
 	$("#btnBajoInventario").on("click",bajoInventario);
 	$("#btnMaterialDañado").on("click",enReparacion);
+	$("#btnMaterialEnPrestamo").on("click",enPrestamo);
 	$("#btnPedidoMaterial").on("click",pedidoMaterial);
 	$('.dropdown-button').dropdown({
 		inDuration: 300,

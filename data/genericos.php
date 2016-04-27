@@ -1561,6 +1561,61 @@ function enReparacion()
 	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
 	print json_encode($salidaJSON);
 }
+function enPrestamo()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$prestamo	= "";
+		$con 		= 0;
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("select p.clavePrestamo,p.ALUCTR,p.fechaPrestamo,p.horaPrestamo,a.descripcionArticulo from lbprestamos p
+inner join lbprestamosarticulos pa on pa.clavePrestamo=p.clavePrestamo
+inner join lbarticulos a on a.identificadorArticulo= pa.identificadorArticulo
+where p.claveResponsable=%s and pa.estatus='P'",$responsable);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='clavePrestamo'>Clave</th>";
+		$renglones	.= "<th data-field='ALUCTR'>No. Control</th>";
+		$renglones	.= "<th data-field='fechaPrestamo'>Fecha</th>";
+		$renglones	.= "<th data-field='horaPrestamo'>Hora</th>";
+		$renglones	.= "<th data-field='descripcionArticulo'>Articulo</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["clavePrestamo"]."</td>";
+			$renglones .= "<td>".$rows[$c]["ALUCTR"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaPrestamo"]."</td>";
+			$renglones .= "<td>".$rows[$c]["horaPrestamo"]."</td>";
+			$renglones .= "<td>".$rows[$c]["descripcionArticulo"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
 //Menú principal
 $opc = $_POST["opc"];
 switch ($opc){
@@ -1673,6 +1728,9 @@ switch ($opc){
 	break;
 	case 'enReparacion1':
 	enReparacion();
+	break;
+	case 'enPrestamo1':
+	enPrestamo();
 	break;
 } 
 ?>

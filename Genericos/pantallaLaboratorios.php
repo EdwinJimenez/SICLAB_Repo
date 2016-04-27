@@ -111,6 +111,9 @@
 			<div id="enReparacion">
 				<?php include 'enReparacion.php';?>
 			</div>
+			<div id="enPrestamo">
+				<?php include 'articulosEnPrestamo.php';?>
+			</div>
 			<div id="existenciaInventario">
 				<?php include 'existenciaInventario.php';?>
 			</div>
