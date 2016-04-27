@@ -51,6 +51,29 @@ var alumnosActuales = function()
 			}
 		});
 	}
+	var proximosApartados = function()	
+	{
+	var parametros = "opc=proximosApartados1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbProximosApartados").html(" ");
+					$("#tbProximosApartados").append(response.renglones);
+				}
+			},
+			error: function(xhr, ajaxOptions,x){
+				
+				console.log(xhr);
+			}
+		});
+	}
 	var resumenInventarioActual = function()
 	{
 		//ocultar los div
@@ -1556,6 +1579,7 @@ var articulosEnReparacion = function()
 	$("#tabReportesGenericos").on("click",alumnosActuales);
 	$("#tabReportesGenericos").on("click",articuloMasPrestado);+
 	$("#tabReportesGenericos").on("click",articulosSinExistencia);
+	$("#tabReportesGenericos").on("click",proximosApartados);
 	$("#btnExistenciaInventario").on("click",existenciaInventario);
 	$("#btnBajoInventario").on("click",bajoInventario);
 	$("#btnMaterialDañado").on("click",enReparacion);

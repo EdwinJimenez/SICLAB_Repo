@@ -30,7 +30,7 @@ where lbasignaarticulos.claveLaboratorio='CCDM' group by claveArticulo;
 select LBARTICULOS.descripcionArticulo as "Descripción" from lbarticulos inner join
 lbasignaarticulos on
 lbarticulos.identificadorArticulo=lbasignaarticulos.indentificadorArticulo inner join lbinventarios on lbarticulos.claveArticulo=lbinventarios.claveArticulo
-where lbasignaarticulos.claveLaboratorio='CCDM' and lbinventarios.cantidad=0 group by lbarticulos.claveArticulo;
+where lbasignaarticulos.claveLaboratorio='CCDM' and lbinventarios.cantidad=0 group by lbarticulos.claveArticulo limit 10;
 
 /*TRAE LOS PRESTAMOS ACTUALES*/
 select p.clavePrestamo,p.ALUCTR,p.fechaPrestamo,p.horaPrestamo,a.descripcionArticulo from lbprestamos p
@@ -39,5 +39,8 @@ inner join lbarticulos a on a.identificadorArticulo= pa.identificadorArticulo
 where p.claveResponsable='1' and pa.estatus='P';
 
 /*NOS TRAE LOS PEDIDOS PENDIENTES DEL LABORATORIO ACTUAL*/
-select clavePedido,fechaPedido,nombreArticulo,cantidad,motivoPedido FROM lbpedidos l inner join lbresponsables r on l.claveResponsable=r.claveResponsable where r.claveLaboratorio='CCDM' and l.estatus='P'
+select clavePedido,fechaPedido,nombreArticulo,cantidad,motivoPedido FROM lbpedidos l inner join lbresponsables r on l.claveResponsable=r.claveResponsable where r.claveLaboratorio='CCDM' and l.estatus='P';
+
+/*Obtiene las proximas solicitudes por atender*/
+SELECT u.usuario, sl.fechaSolicitud, sl.motivoUso, sl.horaSolicitud FROM lbsolicitudlaboratorios sl inner join lbusuarios u on sl.claveUsuario=u.claveUsuario where sl.claveLaboratorio='CCDM' AND sl.estatus='V' order by fechaSolicitud limit 3;
 

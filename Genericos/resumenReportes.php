@@ -62,36 +62,9 @@
 	          <div class="card grey lighten-3">
 	            <div class="card-content black-text">
 	              <span class="card-title">Próximos apartados</span>
-					<table>
-					        <thead>
-					          <tr>
-					              <th data-field="id">Materia</th>
-					              <th data-field="name">Profesor</th>
-					              <th data-field="name">Fecha</th>
-					              <th data-field="price">Hora</th>
-					          </tr>
-					        </thead>
-					        <tbody>
-					          <tr>
-					            <td>Principios Electricos</td>
-					            <td>Joel Bacilio</td>
-					            <td>03/02/16</td>
-					            <td>13:00</td>
-					          </tr>
-					          <tr>
-					            <td>Fundamentos de electricidad</td>
-					            <td>Nicomendes</td>
-					            <td>05/03/16</td>
-					            <td>11:00</td>
-					          </tr>
-					          <tr>
-					            <td>Robotica</td>
-					            <td>Por asignar</td>
-					            <td>06/04/16</td>
-					            <td>08:00</td>
-					          </tr>
-					        </tbody>
-					      </table>
+					<table id="tbProximosApartados">
+					        
+					</table>
 	            </div>
 	          </div>
 	        </div>

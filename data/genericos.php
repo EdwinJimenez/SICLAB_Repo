@@ -1503,6 +1503,58 @@ where lbasignaarticulos.claveLaboratorio='%s' and lbinventarios.cantidad=0 group
 	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
 	print json_encode($salidaJSON);
 }
+function proximosApartados()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$prestamo	= "";
+		$con 		= 0;
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("select u.usuario, sl.fechaSolicitud, sl.motivoUso, sl.horaSolicitud 
+			FROM lbsolicitudlaboratorios sl inner join lbusuarios u on sl.claveUsuario=u.claveUsuario where sl.claveLaboratorio='%s' AND sl.estatus='V' order by fechaSolicitud limit 3",$claveLab);
+		$res 		= mysql_query($consulta);
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='usuario'>Usuario</th>";
+		$renglones	.= "<th data-field='fechaSolicitud'>Fecha</th>";
+		$renglones	.= "<th data-field='horaSolicitud'>Hora</th>";
+		$renglones	.= "<th data-field='motivoUso'>Motivo de uso</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["usuario"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaSolicitud"]."</td>";
+			$renglones .= "<td>".$rows[$c]["horaSolicitud"]."</td>";
+			$renglones .= "<td>".$rows[$c]["motivoUso"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
 function resumenInventarioActual()
 {
 	$respuesta 	= false;
@@ -1825,6 +1877,9 @@ switch ($opc){
 	break;
 	case 'articuloMasPrestado1':
 	articuloMasPrestado();
+	break;
+	case 'proximosApartados1':
+	proximosApartados();
 	break;
 	case 'resumenInventarioActual1':
 	resumenInventarioActual();
