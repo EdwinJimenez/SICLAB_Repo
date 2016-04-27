@@ -1616,6 +1616,59 @@ where p.claveResponsable=%s and pa.estatus='P'",$responsable);
 	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
 	print json_encode($salidaJSON);
 }
+function enPedido()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$prestamo	= "";
+		$con 		= 0;
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("select clavePedido,fechaPedido,nombreArticulo,cantidad,motivoPedido FROM lbpedidos l inner join lbresponsables r on l.claveResponsable=r.claveResponsable where r.claveLaboratorio='%s' and l.estatus='P'",$claveLab);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='clavePedido'>Clave</th>";
+		$renglones	.= "<th data-field='fechaPedido'>Fecha</th>";
+		$renglones	.= "<th data-field='nombreArticulo'>Articulo</th>";
+		$renglones	.= "<th data-field='cantidad'>Cantidad</th>";
+		$renglones	.= "<th data-field='motivoPedido'>Motivo</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["clavePedido"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaPedido"]."</td>";
+			$renglones .= "<td>".$rows[$c]["nombreArticulo"]."</td>";
+			$renglones .= "<td>".$rows[$c]["cantidad"]."</td>";
+			$renglones .= "<td>".$rows[$c]["motivoPedido"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
 //Menú principal
 $opc = $_POST["opc"];
 switch ($opc){
@@ -1731,6 +1784,9 @@ switch ($opc){
 	break;
 	case 'enPrestamo1':
 	enPrestamo();
+	break;
+	case 'enPedido1':
+	enPedido();
 	break;
 } 
 ?>

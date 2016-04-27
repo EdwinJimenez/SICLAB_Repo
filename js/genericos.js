@@ -135,6 +135,34 @@ var articulosEnReparacion = function()
 			}
 		});
 	}
+	var articulosPedidos= function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=enPedido1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbPedidosMaterial").html(" ");
+					$("#tbPedidosMaterial").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin articulos pedidos", "No hay articulos en con solicitud de peticion sin aceptar.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
+				console.log(xhr);
+			}
+		});
+	}
 	//FALTA
 	var articulosSinExistencia = function()
 	{
@@ -1473,6 +1501,7 @@ var articulosEnReparacion = function()
 		$("#enReparacion").hide("slow");
 		$("#enPrestamo").hide("slow");
 		$("#pedidoMaterial").show("slow");
+		articulosPedidos();
 
 	}
 	//Salir
