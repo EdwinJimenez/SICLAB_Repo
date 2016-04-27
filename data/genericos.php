@@ -1443,7 +1443,7 @@ order by Cantidad DESC LIMIT 1",$claveLab);
 		{ 
 			$rows = mysql_fetch_array($res); 
 			$renglones .= "<p>Materiales</p>";
-			$renglones .= "<p style= font-size:16px;> Mas solicitado ".$rows["Articulo"]." ".$rows["Cantidad"]."</p>";
+			$renglones .= "<p style= font-size:16px;> Mas solicitado: ".$rows["Articulo"]." (".$rows["Cantidad"].")</p>";
 			$respuesta=true; 
 		} 
 	}
@@ -1496,6 +1496,59 @@ where lbasignaarticulos.claveLaboratorio='%s' group by claveArticulo",$claveLab)
 			$renglones .= "<td>".$rows[$c]["Descripcion"]."</td>";
 			$renglones .= "<td>".$rows[$c]["Existencia"]."</td>";
 			$renglones .= "<td>".$rows[$c]["Caducidad"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
+function enReparacion()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$prestamo	= "";
+		$con 		= 0;
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("select clavePedido,fechaPedido,nombreArticulo,cantidad,motivoPedido FROM lbpedidos l inner join lbresponsables r on l.claveResponsable=r.claveResponsable where r.claveLaboratorio='%s' and l.estatus='P'",$claveLab);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='clavePedido'>Clave</th>";
+		$renglones	.= "<th data-field='fechaPedido'>Descripcion</th>";
+		$renglones	.= "<th data-field='nombreArticulo'>Articulo</th>";
+		$renglones	.= "<th data-field='cantidad'>Cantidad</th>";
+		$renglones	.= "<th data-field='motivoPedido'>Motivo</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["clavePedido"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaPedido"]."</td>";
+			$renglones .= "<td>".$rows[$c]["nombreArticulo"]."</td>";
+			$renglones .= "<td>".$rows[$c]["cantidad"]."</td>";
+			$renglones .= "<td>".$rows[$c]["motivoPedido"]."</td>";
 			$renglones .= "</tr>";
 			$renglones .= "</tbody>";
 			$respuesta = true;
@@ -1617,6 +1670,9 @@ switch ($opc){
 	break;
 	case 'resumenInventarioActual1':
 	resumenInventarioActual();
+	break;
+	case 'enReparacion1':
+	enReparacion();
 	break;
 } 
 ?>

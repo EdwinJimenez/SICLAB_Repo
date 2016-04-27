@@ -79,6 +79,63 @@ var alumnosActuales = function()
 			}
 		});
 	}
+var articulosEnReparacion = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=enReparacion1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbEnReparacion").html(" ");
+					$("#tbEnReparacion").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin articulos en reparación", "No hay articulos en reparación actualmente.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
+				console.log(xhr);
+			}
+		});
+	}
+	//FALTA
+	var articulosSinExistencia = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=articulosSinExistencia1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbInventarioActual").html(" ");
+					$("#tbInventarioActual").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin inventario", "", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión sol aceptadas");
+				console.log(xhr);
+			}
+		});
+	}
 	//TERMINAN REPORTES
 	var articulosPrestados = new Array();
     //Salir del sistema
@@ -1334,6 +1391,7 @@ var alumnosActuales = function()
 		$("#existenciaInventario").hide("slow");
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");
+		$("#enReparacion").hide("slow");
 		$("#resumenReportes").show("slow");
 		alumnosActuales();
 	}
@@ -1342,6 +1400,7 @@ var alumnosActuales = function()
 		$("#resumenReportes").hide("slow");
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");	
+		$("#enReparacion").hide("slow");
 		$("#existenciaInventario").show("slow");
 		resumenInventarioActual();
 	}
@@ -1350,14 +1409,27 @@ var alumnosActuales = function()
 		$("#resumenReportes").hide("slow");
 		$("#existenciaInventario").hide("slow");
 		$("#pedidoMaterial").hide("slow");
+		$("#enReparacion").hide("slow");
 		$("#bajoInventario").show("slow");
+	}
+	var enReparacion = function()
+	{
+		$("#resumenReportes").hide("slow");
+		$("#existenciaInventario").hide("slow");
+		$("#pedidoMaterial").hide("slow");
+		$("#bajoInventario").hide("slow");
+		$("#enReparacion").show("slow");
+		articulosEnReparacion();
+
 	}
 	var pedidoMaterial=function()
 	{
 		$("#resumenReportes").hide("slow");
 		$("#existenciaInventario").hide("slow");
 		$("#bajoInventario").hide("slow");
+		$("#enReparacion").hide("slow");
 		$("#pedidoMaterial").show("slow");
+
 	}
 	//Salir
 	$("#tabSalir").on("click",salir);
@@ -1415,6 +1487,7 @@ var alumnosActuales = function()
 	$("#tabReportesGenericos").on("click",articuloMasPrestado);
 	$("#btnExistenciaInventario").on("click",existenciaInventario);
 	$("#btnBajoInventario").on("click",bajoInventario);
+	$("#btnMaterialDañado").on("click",enReparacion);
 	$("#btnPedidoMaterial").on("click",pedidoMaterial);
 	$('.dropdown-button').dropdown({
 		inDuration: 300,
