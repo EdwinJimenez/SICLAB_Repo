@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 	<link rel="stylesheet" href="../css/genericos.css">
+	
 	<script src="../js/usuarios.js"></script>
 	<script src="../js/genericos.js"></script>
 </head>
@@ -99,10 +100,18 @@
 					    <li><a id="btnMaterialEnPrestamo">En prestamo</a></li>
 					    <li><a id="btnPedidoMaterial">Pedidos</a></li>
 					  </ul>
+					  <!-- Dropdown Trigger -->
+					  <a class='dropdown-button btn waves-effect waves-light blue darken-2' data-activates='dropdown2'>Prácticas</a>
+					  <!-- Dropdown Structure -->
+					  <ul id='dropdown2' class='dropdown-content'>
+					    <li><a id="btnPracticasNoRealizadas">No realizadas</a></li>
+					    <li><a id="btnPracticasRealizadas">Realizadas</a></li>
+					    <li><a id="btnPracticasCanceladas">Canceladas</a></li>
+					  </ul>
 				</ul>
 			</div>
 			<div id="resumenReportes">
-				<h5>Resumen</h5>
+				<h5>Dashboard</h5>
 				<?php include 'resumenReportes.php';?>
 			</div>
 			<div id="bajoInventario">
@@ -119,6 +128,15 @@
 			</div>
 			<div id="pedidoMaterial">
 				<?php include 'pedidoMaterial.php';?>
+			</div>
+			<div id="practicasNoRealizadas">
+				<?php include 'practicasNoRealizadas.php';?>
+			</div>
+			<div id="practicasRealizadas">
+				<?php include 'practicasRealizadas.php';?>
+			</div>
+			<div id="practicasCanceladas">
+				<?php include 'practicasCanceladas.php';?>
 			</div>
 		</div>
 		<div id="salir">

@@ -1780,6 +1780,178 @@ function enPedido()
 	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
 	print json_encode($salidaJSON);
 }
+
+function practicasNoRealizadas()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$prestamo	= "";
+		$con 		= 0;
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("Select claveCalendarizacion, fechaAsignada, horaAsignada, tituloPractica, duracionPractica from lbcalendarizaciones inner join lbasignapracticas on
+lbcalendarizaciones.claveCalendarizacion= lbasignapracticas.clavePractica inner join lbpracticas
+on lbpracticas.clavePractica=lbasignapracticas.clavePractica
+where lbasignaPracticas.claveLaboratorio='%s' and lbcalendarizaciones.estatus='NR'
+and lbpracticas.estatus='V'",$claveLab);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='claveCalendarizacion'>Clave</th>";
+		$renglones	.= "<th data-field='fechaAsignada'>Fecha</th>";
+		$renglones	.= "<th data-field='horaAsignada'>Hora</th>";
+		$renglones	.= "<th data-field='tituloPractica'>Práctica</th>";
+		$renglones	.= "<th data-field='duracionPractica'>Duración</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["claveCalendarizacion"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaAsignada"]."</td>";
+			$renglones .= "<td>".$rows[$c]["horaAsignada"]."</td>";
+			$renglones .= "<td>".$rows[$c]["tituloPractica"]."</td>";
+			$renglones .= "<td>".$rows[$c]["duracionPractica"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
+function practicasRealizadas()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$prestamo	= "";
+		$con 		= 0;
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("Select claveCalendarizacion, fechaAsignada, horaAsignada, tituloPractica, duracionPractica from lbcalendarizaciones inner join lbasignapracticas on
+lbcalendarizaciones.claveCalendarizacion= lbasignapracticas.clavePractica inner join lbpracticas
+on lbpracticas.clavePractica=lbasignapracticas.clavePractica
+where lbasignaPracticas.claveLaboratorio='%s' and lbcalendarizaciones.estatus='R'
+and lbpracticas.estatus='V'",$claveLab);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='claveCalendarizacion'>Clave</th>";
+		$renglones	.= "<th data-field='fechaAsignada'>Fecha</th>";
+		$renglones	.= "<th data-field='horaAsignada'>Hora</th>";
+		$renglones	.= "<th data-field='tituloPractica'>Práctica</th>";
+		$renglones	.= "<th data-field='duracionPractica'>Duración</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["claveCalendarizacion"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaAsignada"]."</td>";
+			$renglones .= "<td>".$rows[$c]["horaAsignada"]."</td>";
+			$renglones .= "<td>".$rows[$c]["tituloPractica"]."</td>";
+			$renglones .= "<td>".$rows[$c]["duracionPractica"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
+function practicasCanceladas()
+{
+	$respuesta 	= false;
+	session_start();
+	if(!empty($_SESSION['nombre']))
+	{ 
+		$responsable= $_SESSION['nombre'];
+		$claveLab 		= obtieneCveLab($responsable); //GUARDO LA CLAVE DEL LAB
+		$prestamo	= "";
+		$con 		= 0;
+		$rows		= array();
+		$renglones	= "";
+		$conexion 	= conectaBDSICLAB();
+		$consulta	= sprintf("Select claveCalendarizacion, fechaAsignada, horaAsignada, tituloPractica, duracionPractica from lbcalendarizaciones inner join lbasignapracticas on
+lbcalendarizaciones.claveCalendarizacion= lbasignapracticas.clavePractica inner join lbpracticas
+on lbpracticas.clavePractica=lbasignapracticas.clavePractica
+where lbasignaPracticas.claveLaboratorio='%s' and lbcalendarizaciones.estatus='NR'
+and lbpracticas.estatus='B'",$claveLab);
+		$res 		= mysql_query($consulta);
+
+		$renglones	.= "<thead>";
+		$renglones	.= "<tr>";
+		$renglones	.= "<th data-field='claveCalendarizacion'>Clave</th>";
+		$renglones	.= "<th data-field='fechaAsignada'>Fecha</th>";
+		$renglones	.= "<th data-field='horaAsignada'>Hora</th>";
+		$renglones	.= "<th data-field='tituloPractica'>Práctica</th>";
+		$renglones	.= "<th data-field='duracionPractica'>Duración</th>";
+		$renglones	.= "</tr>";
+		$renglones	.= "</thead>";
+		while($row = mysql_fetch_array($res))
+		{
+			$rows[]=$row;
+			$respuesta = true;
+			$con++;
+		}
+		
+		for($c= 0; $c< $con; $c++)
+		{
+			$renglones .= "<tbody>";
+			$renglones .= "<tr>";
+			$renglones .= "<td>".$rows[$c]["claveCalendarizacion"]."</td>";
+			$renglones .= "<td>".$rows[$c]["fechaAsignada"]."</td>";
+			$renglones .= "<td>".$rows[$c]["horaAsignada"]."</td>";
+			$renglones .= "<td>".$rows[$c]["tituloPractica"]."</td>";
+			$renglones .= "<td>".$rows[$c]["duracionPractica"]."</td>";
+			$renglones .= "</tr>";
+			$renglones .= "</tbody>";
+			$respuesta = true;
+		}
+	}
+	else
+	{
+		//salir();
+	}
+	$salidaJSON = array('respuesta' => $respuesta, 'renglones' => $renglones);
+	print json_encode($salidaJSON);
+}
 //Menú principal
 $opc = $_POST["opc"];
 switch ($opc){
@@ -1904,6 +2076,15 @@ switch ($opc){
 	break;
 	case 'enPedido1':
 	enPedido();
+	break;
+	case 'practicasNoRealizadas1':
+	practicasNoRealizadas();
+	break;
+	case 'practicasRealizadas1':
+	practicasRealizadas();
+	break;
+	case 'practicasCanceladas1':
+	practicasCanceladas();
 	break;
 } 
 ?>

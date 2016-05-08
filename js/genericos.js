@@ -4,7 +4,6 @@
 	$('select').material_select(); //agregado
 	$('.collapsible').collapsible({
       accordion : false}); // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-	//COMIENZAN REPORTES
 var alumnosActuales = function()	
 {
 	var parametros = "opc=alumnosActuales1"+
@@ -208,6 +207,91 @@ var articulosEnReparacion = function()
 				}
 			},
 			error: function(xhr, ajaxOptions,x){
+				console.log(xhr);
+			}
+		});
+	}
+
+	var noRealizadas = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=practicasNoRealizadas1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbpracticasNoRealizadas").html(" ");
+					$("#tbpracticasNoRealizadas").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin prácticas", "No hay prácticas pendientes actualmente.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
+				console.log(xhr);
+			}
+		});
+	}
+	var Realizadas = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=practicasRealizadas1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbpracticasRealizadas").html(" ");
+					$("#tbpracticasRealizadas").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin prácticas", "No hay prácticas realizadas actualmente.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
+				console.log(xhr);
+			}
+		});
+	}
+	var Canceladas = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=practicasCanceladas1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbpracticasCanceladas").html(" ");
+					$("#tbpracticasCanceladas").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin prácticas", "No hay prácticas canceladas actualmente.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
 				console.log(xhr);
 			}
 		});
@@ -1454,13 +1538,7 @@ var articulosEnReparacion = function()
 		$("#solicitudesPendientes2").hide("slow");
 		$("#atenderSolicitud").show("slow");
 	}
-	//fin de las peticiones de los articulos
-	/*var editarArticulo = function()
-	{		
-		$("#listaArt").hide("slow");
-		$("#editar").show("slow");
-	}*/
-	//Reportes
+
 	var resumenReportes=function()
 	{
 
@@ -1469,6 +1547,9 @@ var articulosEnReparacion = function()
 		$("#bajoInventario").hide("slow");
 		$("#enReparacion").hide("slow");
 		$("#enPrestamo").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
 		$("#resumenReportes").show("slow");
 		alumnosActuales();
 	}
@@ -1479,6 +1560,9 @@ var articulosEnReparacion = function()
 		$("#bajoInventario").hide("slow");	
 		$("#enReparacion").hide("slow");
 		$("#enPrestamo").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
 		$("#existenciaInventario").show("slow");
 		resumenInventarioActual();
 	}
@@ -1489,6 +1573,9 @@ var articulosEnReparacion = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#enReparacion").hide("slow");
 		$("#enPrestamo").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
 		$("#bajoInventario").show("slow");
 	}
 	var enReparacion = function()
@@ -1498,6 +1585,9 @@ var articulosEnReparacion = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");
 		$("#enPrestamo").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
 		$("#enReparacion").show("slow");
 		articulosEnReparacion();
 
@@ -1509,6 +1599,9 @@ var articulosEnReparacion = function()
 		$("#pedidoMaterial").hide("slow");
 		$("#bajoInventario").hide("slow");
 		$("#enReparacion").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
 		$("#enPrestamo").show("slow");
 		articulosEnPrestamo();
 
@@ -1520,9 +1613,52 @@ var articulosEnReparacion = function()
 		$("#bajoInventario").hide("slow");
 		$("#enReparacion").hide("slow");
 		$("#enPrestamo").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
 		$("#pedidoMaterial").show("slow");
 		articulosPedidos();
 
+	}
+	var practicasNoRealizadas=function()
+	{
+		$("#resumenReportes").hide("slow");
+		$("#existenciaInventario").hide("slow");
+		$("#bajoInventario").hide("slow");
+		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
+		$("#pedidoMaterial").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
+		$("#practicasNoRealizadas").show("slow");
+
+		noRealizadas();
+	}
+	var practicasRealizadas=function()
+	{
+		$("#resumenReportes").hide("slow");
+		$("#existenciaInventario").hide("slow");
+		$("#bajoInventario").hide("slow");
+		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
+		$("#pedidoMaterial").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasCanceladas").hide("slow");
+		$("#practicasRealizadas").show("slow");
+		Realizadas();
+	}
+	var practicasCanceladas=function()
+	{
+		$("#resumenReportes").hide("slow");
+		$("#existenciaInventario").hide("slow");
+		$("#bajoInventario").hide("slow");
+		$("#enReparacion").hide("slow");
+		$("#enPrestamo").hide("slow");
+		$("#pedidoMaterial").hide("slow");
+		$("#practicasNoRealizadas").hide("slow");
+		$("#practicasRealizadas").hide("slow");
+		$("#practicasCanceladas").show("slow");
+		Canceladas();
 	}
 	//Salir
 	$("#tabSalir").on("click",salir);
@@ -1575,9 +1711,12 @@ var articulosEnReparacion = function()
 	
 	//Reportes
 	$("#tabReportesGenericos").on("click",resumenReportes);
+	$("#btnPracticasNoRealizadas").on("click",practicasNoRealizadas);
+	$("#btnPracticasRealizadas").on("click",practicasRealizadas);
+	$("#btnPracticasCanceladas").on("click",practicasCanceladas);
 	$("#btnResumenReportes").on("click",resumenReportes);
 	$("#tabReportesGenericos").on("click",alumnosActuales);
-	$("#tabReportesGenericos").on("click",articuloMasPrestado);+
+	$("#tabReportesGenericos").on("click",articuloMasPrestado);
 	$("#tabReportesGenericos").on("click",articulosSinExistencia);
 	$("#tabReportesGenericos").on("click",proximosApartados);
 	$("#btnExistenciaInventario").on("click",existenciaInventario);

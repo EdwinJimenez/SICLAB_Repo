@@ -1570,7 +1570,6 @@ var inicioMaestro = function ()
     	alert("hola");
     	//window.print();
     	//$("#listaAsistencia").print(/*options*/);
-    });
     	//listaAsistencia
     }
 	//Configuramos el evento del Tab
