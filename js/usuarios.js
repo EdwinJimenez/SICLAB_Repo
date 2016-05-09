@@ -1,3 +1,4 @@
+var tipoUsu = -1;
 var inicio = function ()
 {
 	var claveUsuario = -1;
@@ -26,6 +27,7 @@ var inicio = function ()
 				success: function(response){
 					if(response.respuesta == true)
 					{
+						tipoUsu = response.tipo;
 						switch (response.tipo){
 							case "1":
 							$("#acceso").hide();
@@ -38,26 +40,85 @@ var inicio = function ()
 				                    url:"../data/genericos.php",
 				                    data: parametros, 
 				                    success: function(data) {  
-				                            $(".acceso").hide("slow");
-				                            $(".accesoAlumno").show("slow");  
+				                    
 				                    }  
 				                }); 
 							break;
 							case "2":
 							$("#acceso").hide();
 							$("#genericos").show("slow");
+							var parametros = "opc=usuario1"+"&clave1="+response.claveUsuario+"&id="+Math.random();
+				               $.ajax({  
+				                    cache:false,
+				                    type: "POST",
+				                    dataType: "json",
+				                    url:"../data/genericos.php",
+				                    data: parametros, 
+				                    success: function(data) {  
+				                              
+				                    }  
+				                }); 
 							break;
 							case "3":
 							$("#acceso").hide();
+							$("#tabReportesGenericos").addClass("disabled");
+							$("#btnAlta").hide();
+							$("#btnMantenimiento").hide();
+							$("#btnBaja").hide();
+							$("#btnPeticionArticulo").hide();
+							$("#btnPeticionesPendientes").hide();
+							$("#btnPendientesLab").hide();
 							$("#genericos").show("slow");
+							var parametros = "opc=usuario1"+"&clave1="+response.claveUsuario+"&id="+Math.random();
+				               $.ajax({  
+				                    cache:false,
+				                    type: "POST",
+				                    dataType: "json",
+				                    url:"../data/genericos.php",
+				                    data: parametros, 
+				                    success: function(data) {  
+				                              
+				                    }  
+				                }); 
 							break;
 							case "4":
 							$("#acceso").hide();
 							$("#alumno").show("slow");
+							var parametros = "opc=usuario1"+"&clave1="+response.claveUsuario+"&id="+Math.random();
+				               $.ajax({  
+				                    cache:false,
+				                    type: "POST",
+				                    dataType: "json",
+				                    url:"../data/alumnos.php",
+				                    data: parametros, 
+				                    success: function(data) {  
+				                              
+				                    }  
+				                }); 
 							break;
 							case "5":
 							$("#acceso").hide();
+							$("#tabPrestamos").addClass("disabled");
+							$("#tabLabs").addClass("disabled");
+							$("#btnPendientes").hide();
+							$("#btnEnProceso").hide();
+							$("#btnListaSanciones").hide();
+							$("#btnAlta").hide();
+							$("#btnMantenimiento").hide();
+							$("#btnBaja").hide();
+							$("#btnPeticionArticulo").hide();
 							$("#genericos").show("slow");
+							var parametros = "opc=usuario1"+"&clave1="+response.claveUsuario+"&id="+Math.random();
+				               $.ajax({  
+				                    cache:false,
+				                    type: "POST",
+				                    dataType: "json",
+				                    url:"../data/genericos.php",
+				                    data: parametros, 
+				                    success: function(data) {  
+				                              
+				                    }  
+				                }); 
 							break;
 							case "6":
 							$("#acceso").hide();

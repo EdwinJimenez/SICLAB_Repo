@@ -2,18 +2,18 @@
 <html lang="es">
 <head>
 	<link rel="stylesheet" href="../css/genericos.css">
-	
 	<script src="../js/usuarios.js"></script>
 	<script src="../js/genericos.js"></script>
+
 </head>
 <body>
 	<div id="pantallaLaboratorios" class="body2">
 		<div class="row">
 			<div class="col s12">
 				<ul class="tabs" id="selector">
-					<li id="tabPrestamos" class="tab col s2"><a class="active breadcrumb" href="#prestamos">Préstamos</a></li>
+					<li id="tabPrestamos" class="tab col s2"><a class="breadcrumb" href="#prestamos">Préstamos</a></li>
 					<li id="tabLabs" class="tab col s2"><a class="breadcrumb" href="#laboratorios">Laboratorios</a></li>
-					<li id="tabInventario" class="tab col s2"><a class="breadcrumb" href="#inventarios">Inventario</a></li>
+					<li id="tabInventario" class="tab col s2"><a class="active breadcrumb" href="#inventarios">Inventario</a></li>
 					<li id="tabReportesGenericos" class="tab col s2"><a class="breadcrumb" href="#reportesGenericos">Reportes</a></li>
 					<li id="tabSalir"class="tab col s3"><a class="breadcrumb" href="#salir">Salir</a></li>
 				</ul>

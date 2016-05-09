@@ -3,10 +3,10 @@
 	        <div class="col s4 m4">
 	          <div class="card blue-grey lighten-2">
 	            <div class="card-content white-text">
-	              <span class="card-title">Uso del laboratorio</span>
-	              <p>Mes actual: 500 Alumnos</p>
+	              <span class="card-title" id="usoLaboratorio">Uso del laboratorio</span>
+	              <!--<p>Mes actual: 500 Alumnos</p>
 	              <p>Mes anterior: 700 Alumnos</p>
-	              <p>Mes con mayor uso: Marzo</p>
+	              <p>Mes con mayor uso: Marzo</p>-->
 	            </div>
 	          </div>
 	        </div>

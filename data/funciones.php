@@ -18,13 +18,44 @@ function periodoActual ()
 		return $row["PARFOL1"];
 	}
 }
+//treae el nombre del laboratorio y el departamento
+function deptoLab($s)
+{
+	$sol 			= $s;
+	$nomLab 		= "";
+	$depto 			= "";
+	$conexion 		= conectaBDSICLAB();
+	$consulta 		= sprintf("select l.nombreLaboratorio, l.DEPCVE from lbsolicitudlaboratorios s inner join lblaboratorios l on s.claveLaboratorio = s.claveLaboratorio where s.claveSolicitud =%d",$sol);
+	$res			= mysql_query($consulta);
+	if($row = mysql_fetch_array($res))
+	{
+		$nomLab = $row["nombreLaboratorio"];
+		$depto  = $row["DEPCVE"];
+	}
+	$resultado = array('nomLab' => $nomLab,
+						'depto' => $depto );
+	return $resultado;
+}
+function nomDepto($d)
+{
+	$depto 			= GetSQLValueString($d,"int");
+	$nomDep 		= "";
+	$conexion 		= conectaBDSIE();
+	$consulta 		= sprintf("select DEPNOM from DDEPTO where DEPCVE =%d",$depto);
+	$res			= mysql_query($consulta);
+	if($row = mysql_fetch_array($res))
+	{
+		$depto  = $row["DEPNOM"];
+	}
+	return $depto;
+}
 //trae el nombre corto de las materias segun una clave
 function nomMat ($claves)
 {
 	$claveMat 	= $claves;
 	$materias	= array();
 	$conexion	= conectaBDSIE();
-	$consulta	= sprintf("select MATCVE, MATNCO from DMATER where MATCVE IN (%s)",$claveMat);
+	$consulta	= sprintf("select MATCVE, MATNCO from DMATER where MATCVE IN (%s) order by MATNCO",$claveMat);
 	$res 		= mysql_query($consulta);
 	if($res)
 	{
@@ -39,6 +70,23 @@ function nomMat ($claves)
 		return "";
 	}
 }
+function nomCarr ($cve,$gpo,$mat,$pe)
+{
+	$carrera 	= "";
+	$clave 		= $cve;
+	$maestro 	= claveMaestro($clave);
+	$grupo 		= $gpo;
+	$materia 	= $mat;
+	$periodo 	= $pe;
+	$conexion	= conectaBDSIE();
+	$consulta	= sprintf("select c.CARNOM from DGRUPO g INNER JOIN DCARRE c on g.CARCVE = c.CARCVE where g.PERCVE =%d and g.GPOCVE =%s and g.MATCVE =%s and g.PDOCVE =%s",$maestro,$grupo,$materia,$periodo);
+	$res 		= mysql_query($consulta); 
+	if($row = mysql_fetch_array($res))
+	{
+		$carrera = $row["CARNOM"];
+	}
+	return $carrera;	
+}
 function existeCal ($clave)
 {
 	$claveCal	= $clave;
@@ -52,7 +100,7 @@ function existeCal ($clave)
 	return false;
 }
 function existCal($clave,$p,$mat,$gpo,$pract,$f,$hr)
-{
+{	
 	$maestro	= $clave;
 	$periodo 	= $p;
 	$materia 	= $mat;
@@ -61,17 +109,21 @@ function existCal($clave,$p,$mat,$gpo,$pract,$f,$hr)
 	$fecha 		= $f;
 	$hora 		= $hr;
 	$cal 		= 0;
+	$sol 		= 0;
 	$conexion 	= conectaBDSICLAB();
-	$consulta 	= sprintf("select c.claveCalendarizacion from lbcalendarizaciones c inner join lbsolicitudlaboratorios s on c.claveSolicitud = s.claveSolicitud where s.claveUsuario=%d and s.PDOCVE=%s and s.MATCVE=%s and s.GPOCVE=%s and s.clavePractica=%d and c.fechaAsignada=%s and c.horaAsignada=%s and c.estatus = 'R'",$maestro,$periodo,$materia,$grupo,$practica,$fecha,$hora);
+	$consulta 	= sprintf("select c.claveCalendarizacion, c.claveSolicitud from lbcalendarizaciones c inner join lbsolicitudlaboratorios s on c.claveSolicitud = s.claveSolicitud where s.claveUsuario=%d and s.PDOCVE=%s and s.MATCVE=%s and s.GPOCVE=%s and s.clavePractica=%d and c.fechaAsignada=%s and c.horaAsignada=%s and c.estatus = 'R'",$maestro,$periodo,$materia,$grupo,$practica,$fecha,$hora);
 	$res 		= mysql_query($consulta); 
 	if($res)
 	{
 		if($row = mysql_fetch_array($res))
 		{
-			$cal = $row["claveCalendarizacion"];
+			$cal = (int)$row["claveCalendarizacion"];
+			$sol = (int)$row["claveSolicitud"];
 		}
 	}
-	return $cal;
+	$resultado = array('cal' => $cal,
+						'sol' => $sol);
+	return $resultado;
 }
 function numerosControl($nums)
 {
@@ -242,7 +294,7 @@ function comboMat ()
 	$claveMat 		= "";
 	$nombreMat		= "";
 	$conexion		= conectaBDSIE();
-	$consulta		= sprintf("select m.MATCVE, m.MATNCO from DMATER m inner join DGRUPO g on m.MATCVE = g.MATCVE where g.PERCVE =%d and g.PDOCVE =%s and g.GRUBAS = ' ' and g.INSNUM > 0",$maestro,$periodo);
+	$consulta		= sprintf("select m.MATCVE, m.MATNCO from DMATER m inner join DGRUPO g on m.MATCVE = g.MATCVE where g.PERCVE =%d and g.PDOCVE =%s and g.GRUBAS = ' ' and g.INSNUM > 0 order by m.MATNCO",$maestro,$periodo);
 	$res 			= mysql_query($consulta);
 	if($res)
 	{
@@ -295,14 +347,13 @@ function comboMatHr ()
 function comboPract()
 {
 	$materia 		= GetSQLValueString($_POST["materia"],"text");
-	$periodo 		= GetSQLValueString($_POST["periodo"],"text");
 	$respuesta 		= false;
 	$comboPrac 		= array();
 	$comboCvePrac 	= "";
 	$comboTitPrac 	= "";
 	$con 			= 0;
 	$conexion		= conectaBDSICLAB();
-	$consulta		= sprintf("select p.clavePractica, p.tituloPractica from lbpracticas p inner join lbasignapracticas ap on p.clavePractica = ap.clavePractica where p.estatus = 'V' and ap.MATCVE =%s and ap.PDOCVE =%s",$materia,$periodo);
+	$consulta		= sprintf("select p.clavePractica, p.tituloPractica from lbpracticas p inner join lbasignapracticas ap on p.clavePractica = ap.clavePractica where p.estatus = 'V' and ap.MATCVE =%s order by p.tituloPractica",$materia);
 	$res 			= mysql_query($consulta);
 	while($row = mysql_fetch_array($res))
 	{
@@ -330,7 +381,7 @@ function comboLab()
 	$comboNomLab 	= "";
 	$con 			= 0;
 	$conexion		= conectaBDSICLAB();
-	$consulta		= sprintf("select ap.claveLaboratorio, l.nombreLaboratorio from lbasignapracticas ap inner join lbpracticas p on ap.clavePractica = p.clavePractica inner join lblaboratorios l on ap.claveLaboratorio = l.claveLaboratorio where (l.usoAsignado = '1' or '3') and p.estatus = 'V' and ap.clavePractica=%d",$practica);
+	$consulta		= sprintf("select ap.claveLaboratorio, l.nombreLaboratorio from lbasignapracticas ap inner join lbpracticas p on ap.clavePractica = p.clavePractica inner join lblaboratorios l on ap.claveLaboratorio = l.claveLaboratorio where (l.usoAsignado = '1' or '3') and p.estatus = 'V' and ap.clavePractica=%d order by l.nombreLaboratorio",$practica);
 	$res 			= mysql_query($consulta);
 	while($row = mysql_fetch_array($res))
 	{
@@ -381,7 +432,7 @@ function comboEleArt()
 	$comboNomArt 	= "";
 	$con 			= 0;
 	$conexion		= conectaBDSICLAB();
-	$consulta		= sprintf("select DISTINCT (c.nombreArticulo), c.claveArticulo from lbarticuloscat c inner join lbarticulos a on a.claveArticulo = c.claveArticulo inner join lbasignaarticulos aa on aa.indentificadorArticulo = a.identificadorArticulo where aa.claveLaboratorio =%s and a.estatus = 'V'",$laboratorio);
+	$consulta		= sprintf("select DISTINCT (c.nombreArticulo), c.claveArticulo from lbarticuloscat c inner join lbarticulos a on a.claveArticulo = c.claveArticulo inner join lbasignaarticulos aa on aa.indentificadorArticulo = a.identificadorArticulo where aa.claveLaboratorio =%s and a.estatus = 'V' order by c.nombreArticulo",$laboratorio);
 	$res 			= mysql_query($consulta);
 	while($row = mysql_fetch_array($res))
 	{
@@ -460,7 +511,7 @@ function comboMatRep ()
 	$claveMat 		= "";
 	$nombreMat		= "";
 	$conexion		= conectaBDSIE();
-	$consulta		= sprintf("select m.MATCVE, m.MATNCO from DMATER m inner join DGRUPO g on m.MATCVE = g.MATCVE where g.PERCVE =%d and g.PDOCVE =%s and g.GRUBAS = ' ' and g.INSNUM > 0",$maestro,$periodo);
+	$consulta		= sprintf("select m.MATCVE, m.MATNCO from DMATER m inner join DGRUPO g on m.MATCVE = g.MATCVE where g.PERCVE =%d and g.PDOCVE =%s and g.GRUBAS = ' ' and g.INSNUM > 0 order by m.MATNCO",$maestro,$periodo);
 	$res 			= mysql_query($consulta);
 	if($res)
 	{

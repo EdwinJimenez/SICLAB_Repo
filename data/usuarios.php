@@ -7,6 +7,7 @@ function validaUsuario()
 	$cve 			= GetSQLValueString(md5($_POST["cveUsuario"]),"text");
 	$tipo			= "0";
 	$usuario 		= "";
+	$claveUsuario 	= "";
 	$conexion 		= conectaBDSICLAB();
 	$consulta 		= sprintf("select * from lbusuarios where usuario=%s and cveUsuario=%s limit 1",$usu,$cve);
 	$res			= mysql_query($consulta);
@@ -35,7 +36,7 @@ function claveUsuario1()
 	if($row = mysql_fetch_array($res))
 	{
 		$respuesta = true;
-		$claveUsuario = $row["claveUsuario"];
+		$claveUsuario = (int)$row["claveUsuario"];
 	}
 	$arrayJSON = array('respuesta' => $respuesta,
 						'claveUsuario' => $claveUsuario);

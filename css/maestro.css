@@ -1,3 +1,17 @@
+.bajo
+{
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
+	height: 105.5px;
+}
+.cuadro
+{
+	border: 2px solid black;
+}
+.centrado
+{
+	text-align: center;
+}
 #editarSolicitudLab
 {
 	display: none;
@@ -6,9 +20,21 @@
 {
 	display: none;
 }
+.fuente
+{
+	font-weight: bold;
+	font-size: 14px;
+	font-family: arial;
+	color: black;
+}
 #lista
 {
 	display: none;
+}
+#LogoTec
+{
+	width: 100px;
+	height: 97px;
 }
 #sNuevaMaestro
 {
@@ -22,3 +48,4 @@
 {
 	display: none;
 }
+

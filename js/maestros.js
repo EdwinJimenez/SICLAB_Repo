@@ -35,7 +35,8 @@ var inicioMaestro = function ()
 					dataType: "json",
 					url:"../data/funciones.php",
 					data: parametros,
-					success: function(response){
+					success: function(response)
+					{
 						if(response.respuesta)
 						{
 							document.location.href= "acceso.php";
@@ -62,6 +63,7 @@ var inicioMaestro = function ()
 	//Empieza función de solicitudes Aceptadas
 	var solAceptadas = function()
 	{
+		$("#tbSolAceptadas").html(" ");
 		//ocultar los div
 		$("#sNuevaMaestro").hide();
 		$("#sPendientesMaestro").hide();
@@ -357,7 +359,8 @@ var inicioMaestro = function ()
 				}
 			},
 			error: function(xhr, ajaxOptions,x){
-				console.log("Error de conexión combomat");	
+				console.log("Error de conexión combomat");
+				console.log(xhr);	
 			}
 		});
 	}//termina función de llenar combo de elegir articulos
@@ -1239,7 +1242,8 @@ var inicioMaestro = function ()
 			},
 			error: function(xhr, ajaxOptions,x)
 			{
-				console.log("Error de conexión datosMaestro");	
+				console.log("Error de conexión reportes");
+				console.log(xhr);	
 			}
 		});
 	}
@@ -1250,115 +1254,98 @@ var inicioMaestro = function ()
 		$("#lista").show("slow");
 		//limpiar datos
 		$("#txtClaveMaestroRep2").val(" ");
-    	$("#txtNombreMaestroRep2").val(" ");
-    	$("#txtPeriodoRep").val(" ");
-	    $("#txtMateriaRep").val(" ");
-	    $("#txtHoraMatRep").val(" ");
-	    $("#txtPracticaRep").val(" ");
-	    $("#txtHoraPractRep").val(" ");
-	    $("#txtFechaPracticaRep2").val(" ");
+	    $("#txtNombreMaestroRep2").val(" ");
+	    $("#txtPeriodoRep").val(" ");
+		$("#txtMateriaRep").val(" ");
+		$("#txtHoraMatRep").val(" ");
+		$("#txtPracticaRep").val(" ");
+		$("#txtHoraPractRep").val(" ");
+		$("#txtFechaPracticaRep2").val(" ");
 		$("#tbListaAsistencia").html(" ");
-		//contenido dinamico
-		var periodo 	= $("#cmbPeriodoRep").val();
-		var materia 	= $("#cmbMateriaRep").val();
-		var h			= $("#cmbHoraMatRep option:selected").text();
-		var horaMat 	= parseInt(h.substring(0,2));
-		var practica 	= $("#cmbPracticaRep").val();
-		var ff  		= $("#txtFechaPracticaRep").val();
-    	var a  			= ff.substring(0,4);
-    	var m  			= ff.substring(5,7);
-    	var d  			= ff.substring(8,10);
-    	var fecha 		= d+"/"+m+"/"+a;
-		var horaPract 	= $("#cmbHoraPracticaRep option:selected").text(); 	
-		var parametros = "opc=listaAlumnos1"+
-							"&periodo="+periodo+
-							"&materia="+materia+
-							"&horaMat="+horaMat+
-							"&practica="+practica+
-							"&fecha="+fecha+
-							"&horaPract="+horaPract+
-							"&id="+Math.random();
-		$.ajax({
-    		cache:false,
-    		type: "POST",
-    		dataType: "json",
-    		url:"../data/maestros.php",
-    		data: parametros,
-    		success: function(response)
-    		{
-    			if (response.respuesta==true) 
-    			{
-    				//llenar datos
-    				$("#txtClaveMaestroRep2").val($("#txtClaveMaestroRep").val());
-    				$("#txtNombreMaestroRep2").val($("#txtNombreMaestroRep").val());
-    				$("#txtPeriodoRep").val($("#cmbPeriodoRep option:selected").text());
-	    			$("#txtMateriaRep").val($("#cmbMateriaRep option:selected").text());
-	    			$("#txtHoraMatRep").val($("#cmbHoraMatRep option:selected").text());
-	    			$("#txtPracticaRep").val($("#cmbPracticaRep option:selected").text());
-	    			$("#txtHoraPractRep").val($("#cmbHoraPracticaRep option:selected").text());
-	    			$("#txtFechaPracticaRep2").val($("#txtFechaPracticaRep").val());
-	    			//crear tabla de asistencia de alumnos
-	    			$("#tbListaAsistencia").html(" ");
-					$("#tbListaAsistencia").append(response.renglones);
-	    		}
-	    		else
+		if($("#cmbPeriodoRep").val()!= " " && $("#cmbMateriaRep").val() != " " && $("#cmbHoraMatRep").val() != " " && $("#cmbPracticaRep").val() != " " && $("#cmbHoraPracticaRep").val() != " " && $("#txtFechaPracticaRep").val() != " ")
+		{
+			//contenido dinamico
+			var periodo 	= $("#cmbPeriodoRep").val();
+			var materia 	= $("#cmbMateriaRep").val();
+			var h			= $("#cmbHoraMatRep option:selected").text();
+			var horaMat 	= parseInt(h.substring(0,2));
+			var practica 	= $("#cmbPracticaRep").val();
+			console.log(practica);
+			var ff  		= $("#txtFechaPracticaRep").val();
+	    	var a  			= ff.substring(0,4);
+	    	var m  			= ff.substring(5,7);
+	    	var d  			= ff.substring(8,10);
+	    	var fecha 		= d+"/"+m+"/"+a;
+			var horaPract 	= $("#cmbHoraPracticaRep option:selected").text(); 	
+			var parametros = "opc=listaAlumnos1"+
+								"&periodo="+periodo+
+								"&materia="+materia+
+								"&horaMat="+horaMat+
+								"&practica="+practica+
+								"&fecha="+fecha+
+								"&horaPract="+horaPract+
+								"&id="+Math.random();
+			$.ajax({
+	    		cache:false,
+	    		type: "POST",
+	    		dataType: "json",
+	    		url:"../data/maestros.php",
+	    		data: parametros,
+	    		success: function(response)
 	    		{
-	    			//limpiar datos
-					$("#txtClaveMaestroRep2").val(" ");
-			    	$("#txtNombreMaestroRep2").val(" ");
-			    	$("#txtPeriodoRep").val(" ");
-				    $("#txtMateriaRep").val(" ");
-				    $("#txtHoraMatRep").val(" ");
-				    $("#txtPracticaRep").val(" ");
-				    $("#txtHoraPractRep").val(" ");
-				    $("#txtFechaPracticaRep2").val(" ");
-					$("#tbListaAsistencia").html(" ");
-					$("#tbListaAsistencia").html(" ");
-					sweetAlert("No existe ninguna práctica", "No se realizo ninguna práctica!", "error");
-	    		}
-			},
-			error: function(xhr, ajaxOptions,x)
-			{
-				console.log("Error de conexión datosMaestro");	
-			}
-		});
+	    			if (response.respuesta==true) 
+	    			{
+	    				//llenar datos	
+	    				$("#txtClaveMaestroRep2").val($("#txtClaveMaestroRep").val());
+	    				$("#txtNombreMaestroRep2").val($("#txtNombreMaestroRep").val());
+	    				$("#txtPeriodoRep").val($("#cmbPeriodoRep option:selected").text());
+		    			$("#txtMateriaRep").val($("#cmbMateriaRep option:selected").text());
+		    			$("#txtHoraMatRep").val($("#cmbHoraMatRep option:selected").text());
+		    			$("#txtPracticaRep").val($("#cmbPracticaRep option:selected").text());
+		    			$("#txtHoraPractRep").val($("#cmbHoraPracticaRep option:selected").text());
+		    			$("#txtFechaPracticaRep2").val($("#txtFechaPracticaRep").val());
+		    			$("#txtCarreraRep").val(response.carrera);
+		    			//crear tabla de asistencia de alumnos
+		    			$("#tbListaAsistencia").html(" ");
+						$("#tbListaAsistencia").append(response.renglones);
+						//Abrir ventana en otro lado
+						window.open("../Maestro/reporteListas.php?"+"periodo="+periodo+"&nomLab="+response.nomLab+"&nomDepto="+response.depto+"&cveMaestro="+$("#txtClaveMaestroRep2").val()+"&nomMaestro="+$("#txtNombreMaestroRep2").val()+"&carrera="+$("#txtCarreraRep").val()+"&nomMateria="+$("#txtMateriaRep").val()+"&nomPractica="+$("#txtPracticaRep").val()+"&materia="+materia+"&horaMat="+horaMat+"&fechaPrac="+fecha+"&practica="+practica+"&horaPrac="+horaPract,"asistencia","width=120,height=300,scrollbars=NO");
+		    		}
+		    		else
+		    		{
+		    			//limpiar datos
+		    			$("#txtCarreraRep").val("");
+						$("#txtClaveMaestroRep2").val(" ");
+				    	$("#txtNombreMaestroRep2").val(" ");
+				    	$("#txtPeriodoRep").val(" ");
+					    $("#txtMateriaRep").val(" ");
+					    $("#txtHoraMatRep").val(" ");
+					    $("#txtPracticaRep").val(" ");
+					    $("#txtHoraPractRep").val(" ");
+					    $("#txtFechaPracticaRep2").val(" ");
+						$("#tbListaAsistencia").html(" ");
+						$("#tbListaAsistencia").html(" ");
+						sweetAlert("No existe ninguna práctica", "No se realizo ninguna práctica!", "error");
+		    		}
+				},
+				error: function(xhr, ajaxOptions,x)
+				{
+					console.log("Error de conexión datos Maestro");
+					console.log(xhr);	
+				}
+			});
+		}
+		else
+		{
+			sweetAlert("Error", "No ha seleccionado todos los campos necesarios", "error");
+		}
 	}
 	var regresarRep = function()
 	{
 		$("#lista").hide();
 		$("#selecionarLista").show("slow");
 		//limpiar
-		$("#txtClaveMaestroRep2").val(" ");
-    	$("#txtNombreMaestroRep2").val(" ");
-    	$("#txtPeriodoRep").val(" ");
-	    $("#txtMateriaRep").val(" ");
-	    $("#txtHoraMatRep").val(" ");
-	    $("#txtPracticaRep").val(" ");
-	    $("#txtHoraPractRep").val(" ");
-	    $("#txtFechaPracticaRep2").val(" ");
-	    $("#txtFechaPracticaRep").val(" ");
-		//Combo Periodo
-		$("#cmbPeriodoRep").html(" ");
-		$("#cmbPeriodoRep").html("<option value='' disabled selected>Seleccione el Periodo</option>");
-		$('select').material_select();
-		//Combo de la materia
-		$("#cmbMateriaRep").html(" ");
-		$("#cmbMateriaRep").html("<option value='' disabled selected>Seleccione la materia</option>");
-		$('select').material_select();
-		//Combo hora materia
-		$("#cmbHoraMatRep").html(" ");
-		$("#cmbHoraMatRep").html("<option value='' disabled selected>Seleccione la hora</option>");
-		$('select').material_select();
-		//combo de practica
-		$("#cmbPracticaRep").html(" ");
-		$("#cmbPracticaRep").html("<option value='' disabled selected>Seleccione la práctica</option>");
-		$('select').material_select();
-		//combo hora práctica
-		$("#cmbHoraPracticaRep").html(" ");
-		$("#cmbHoraPracticaRep").html("<option value='' disabled selected>Seleccione la hora</option>");
-		$('select').material_select();
-		//limpiar tabla
-		$("#tbListaAsistencia").html("");
+		tbReportes();
 	}
 	var comboMatRep = function()
 	{
@@ -1477,7 +1464,6 @@ var inicioMaestro = function ()
     	var periodo 	= $("#cmbPeriodoRep").val();
     	var parametros 	= "opc=comboPract1"+
     						"&materia="+materia+
-    						"&periodo="+periodo+
     						"&id="+Math.random();
     	$.ajax({
     		cache:false,
@@ -1506,8 +1492,10 @@ var inicioMaestro = function ()
     				sweetAlert("No existen prácticas", "Es posible que no existan prácticas asociadas a dicha materia!", "error");
     			}
     		},
-    		error: function(xhr, ajaxOptions,x){
-    			console.log("Error de conexión comboPrac");	
+    		error: function(xhr, ajaxOptions,x)
+    		{
+    			console.log("Error de conexión comboPrac");
+    			console.log(xhr);	
     		}
     	});
     }
@@ -1565,13 +1553,6 @@ var inicioMaestro = function ()
 			}
 		});
     }
-    var imprimirPDF = function()
-    {
-    	alert("hola");
-    	//window.print();
-    	//$("#listaAsistencia").print(/*options*/);
-    	//listaAsistencia
-    }
 	//Configuramos el evento del Tab
 	$("#salirTab").on("click",salir);
 	$("#solicitudestab").on("click",solAceptadas);
@@ -1607,7 +1588,6 @@ var inicioMaestro = function ()
 	$("#reportestab").on("click",tbReportes);
 	$("#btnListaAsistencia").on("click",listaAsistencia);
 	$("#btnRegresarRep").on("click",regresarRep);
-	$("#btnImprimir").on("click",imprimirPDF);
 	//conbos del menu de reportes
 	$("#cmbPeriodoRep").on("change",comboMatRep);
 	$("#cmbMateriaRep").on("change",comboHrMatRep);
