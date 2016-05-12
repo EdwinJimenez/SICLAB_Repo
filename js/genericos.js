@@ -1444,6 +1444,8 @@
 		$("#practicasRealizadas").hide("slow");
 		$("#practicasCanceladas").hide("slow");
 		$("#bajoInventario").show("slow");
+		//agregue
+		articulosBajoInventario();
 	}
 	var enReparacion = function()
 	{
@@ -1573,6 +1575,31 @@
 			}
 		});
 	}
+	//AGREGUE
+	var practicasNR = function()	
+	{
+		var parametros = "opc=practicasNR1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#practicasNR").html(" ");
+					$("#practicasNR").append(response.renglones);
+				}
+			},
+			error: function(xhr, ajaxOptions,x){
+				
+				console.log(xhr);
+			}
+		});
+		//FIN AGREGUE
+	}
 	var proximosApartados = function()	
 	{
 		var parametros = "opc=proximosApartados1"+
@@ -1691,8 +1718,8 @@
 			success: function(response){
 				if(response.respuesta == true)
 				{
-					$("#tbPedidosMaterial").html(" ");
-					$("#tbPedidosMaterial").append(response.renglones);
+					$("#tbPedidoMaterial").html(" ");
+					$("#tbPedidoMaterial").append(response.renglones);
 				}
 				else
 					sweetAlert("Sin articulos pedidos", "No hay articulos en con solicitud de peticion sin aceptar.", "error");
@@ -1815,6 +1842,36 @@
 		});
 	}
 	//FIN EDWIN NUEVO
+	//AGREGUE
+var articulosBajoInventario = function()
+	{
+		//ocultar los div
+		
+		//contenido dinamico
+		var parametros = "opc=articulosBajoInventario1"+
+		"&id="+Math.random();
+		$.ajax({
+			cache:false,
+			type: "POST",
+			dataType: "json",
+			url:"../data/genericos.php",
+			data: parametros,
+			success: function(response){
+				if(response.respuesta == true)
+				{
+					$("#tbBajoInventario").html(" ");
+					$("#tbBajoInventario").append(response.renglones);
+				}
+				else
+					sweetAlert("Sin articulos", "No hay articulos con bajo inventario.", "error");
+			},
+			error: function(xhr, ajaxOptions,x){
+				console.log("Error de conexión");
+				console.log(xhr);
+			}
+		});
+	}
+	//FIN AGREGUE
 	//Salir
 	$("#tabSalir").on("click",salir);
 	//Prestamos
@@ -1873,6 +1930,7 @@
 	$("#btnResumenReportes").on("click",resumenReportes);
 	$("#tabReportesGenericos").on("click",alumnosActuales);
 	$("#tabReportesGenericos").on("click",articuloMasPrestado);
+	$("#tabReportesGenericos").on("click",practicasNR);
 	$("#tabReportesGenericos").on("click",articulosSinExistencia);
 	$("#tabReportesGenericos").on("click",proximosApartados);
 	$("#btnExistenciaInventario").on("click",existenciaInventario);

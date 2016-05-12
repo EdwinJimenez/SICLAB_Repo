@@ -1,35 +1,47 @@
 <div>
-	<h5>Productos con bajo inventrio</h5>
-	<table>
-        <thead>
-          <tr>
-              <th data-field="id">Código</th>
-              <th data-field="name">Descripcion</th>
-              <th data-field="price">Existencia</th>
-          </tr>
-        </thead>
+  <h5>Articulos con bajo inventario</h5>
+  <div id="impArtBajoInventario">
+  <table id="tbBajoInventario">
 
-        <tbody>
-          <tr>
-            <td>P001</td>
-            <td>Cautin</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td>P002</td>
-            <td>Taladro</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>P003</td>
-            <td>Multimetro</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>P001</td>
-            <td>Cinta</td>
-            <td>1</td>
-          </tr>
-        </tbody>
-      </table>
+  </table>
+  </div>
+  <div id="editor"></div>
+  <div class="row">
+      <div class="col s5 offset-s7">
+        <a id="btnImprimirBajoInventario" class="waves-effect waves-light btn green darken-2 "><i class="material-icons left">print</i>Imprimir</a>
+      </div>
+    </div>  
 </div>
+<script>
+    $(function(){
+      var l = {
+         orientation: 'l',
+         unit: 'mm',
+         format: 'a3',
+         compress: true,
+         fontSize: 10,
+         lineHeight: 1,
+         autoSize: false,
+         printHeaders: true}
+         var doc = new jsPDF(l, '', '', '');
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+
+   $('#btnImprimirBajoInventario').click(function () {
+      doc.margins = 1;
+                doc.setFont("times");
+   
+        doc.fromHTML($('#impArtBajoInventario').html(), 50, 20, {
+        'setFontSize':10,
+        'width': 300,
+            'elementHandlers': specialElementHandlers
+    });
+doc.text(185,20, "Reporte articulos con bajo inventario");
+doc.text(180,27, "Instituto Tecnologico de Culiacan");
+    doc.save('sample-file.pdf');
+});
+});
+</script>
